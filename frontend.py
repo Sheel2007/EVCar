@@ -17,7 +17,7 @@ spe_total = StringVar(value='0')
 time_total = StringVar(value='0')
 start_op = StringVar(value='')
 
-backend.initialize()
+i2c, dac = backend.initialize()
 
 def sub(total, min_val, change):
     try:
@@ -95,7 +95,9 @@ s_spe = Scale(topframe, borderwidth=10, resolution=5, variable=spe_total, showva
 s_spe.grid(column=1, row=1, columnspan=3, sticky='nsew', padx=5, pady=5)
 s_time = Scale(bottomframe, borderwidth=10, variable=time_total, resolution=5, showvalue=0, from_ = 0, to = 15, orient = HORIZONTAL)
 s_time.grid(column=1, row=1, columnspan=3, sticky='nsew', padx=5, pady=5)
-start_button = ttk.Button(begin, text='Start Car', command=test)
+
+
+start_button = ttk.Button(begin, text='Start Car', command=lambda: backend.volt(dac=dac, i2c=i2c, output_voltage=3, duration=3))
 start_button.grid(column=0, row=0, sticky='nsew', padx=10, pady=1)
 speed_button = ttk.Radiobutton(begin, text="Speed", variable=start_op, value='speed')
 distance_button = ttk.Radiobutton(begin, text="Time", variable=start_op, value='time')

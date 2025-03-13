@@ -25,8 +25,8 @@ dac = MCP4725(i2c, address=0x60)
 # transistor.on()
 
 # MCP4725 is a 12-bit DAC, so values range from 0 (0V) to 4095 (Vcc)
-start_voltage = 0
-output_voltage = 1.5  # Desired output voltage
+start_voltage = 1
+output_voltage = 3  # Desired output voltage
 vcc = 3.3  # DAC reference voltage
 dac_value = int((output_voltage / vcc) * 4095)
 
@@ -34,7 +34,7 @@ dac_value = int((output_voltage / vcc) * 4095)
 
 current_voltage = start_voltage
 
-dac.raw_value = start_voltage
+dac.raw_value = int((start_voltage / vcc) * 4095)
 
 step = 0.1
 print(f'Starting on {current_voltage}V')
@@ -65,6 +65,7 @@ while True:
 print(f"DAC output set to {output_voltage}V")
 
 # Keep the program running to maintain the output
+"""
 test = input()
 
 if test:
@@ -73,4 +74,13 @@ if test:
     # transistor.on()
     # GPIO.output(TRANSISTOR_PIN, GPIO.LOW)
     print("Program terminated.")
+"""
 
+time.sleep(5)
+
+print('Reseting to 0V')
+dac.raw_value = 0
+i2c.deinit()
+# transistor.on()
+# GPIO.output(TRANSISTOR_PIN, GPIO.LOW)
+print("Program terminated succesfully.")

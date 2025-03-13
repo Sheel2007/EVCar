@@ -16,10 +16,10 @@ def initialize():
 
     return i2c, dac
 
-def volt(output_voltage=1.5, dac, step=0.1):
+def volt(dac, i2c, output_voltage=1.5, step=0.1, duration=3):
     # pass
     # MCP4725 is a 12-bit DAC, so values range from 0 (0V) to 4095 (Vcc)
-    start_voltage = 0
+    start_voltage = 1.5
     # output_voltage = 1.5  # Desired output voltage
     vcc = 3.3  # DAC reference voltage
     dac_value = int((output_voltage / vcc) * 4095)
@@ -28,7 +28,7 @@ def volt(output_voltage=1.5, dac, step=0.1):
 
     current_voltage = start_voltage
 
-    dac.raw_value = start_voltage
+    dac.raw_value = dac_value = int((start_voltage / vcc) * 4095)
 
     # step = 0.1
     print(f'Starting on {current_voltage}V')
@@ -46,9 +46,15 @@ def volt(output_voltage=1.5, dac, step=0.1):
 
     print(f"DAC output set to {output_voltage}V")
 
+    time.sleep(duration)
+
+    dac.raw_value = 0
+    # i2c.deinit()
+    print('PROGRAM SUCESSFULLY TERMINATED :)')
+
 # test = input()
 
-def reset(dac, i2c, start_voltage=0)
+def reset(dac, i2c, start_voltage=0):
     dac.raw_value = start_voltage
     i2c.deinit()
     print("Program terminated.")
