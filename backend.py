@@ -12,6 +12,8 @@ def initialize():
     # Create MCP4725 instance
     dac = MCP4725(i2c, address=0x60)
 
+    print('Sucessfully initilized MCP4725!')
+
     return i2c, dac
 
 def volt(output_voltage=1.5, dac, step=0.1):
