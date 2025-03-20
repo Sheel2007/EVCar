@@ -28,7 +28,7 @@ def volt(dac, i2c, output_voltage=1.5, step=0.1, duration=3):
 
     current_voltage = start_voltage
 
-    dac.raw_value = dac_value = int((start_voltage / vcc) * 4095)
+    dac.raw_value = int((start_voltage / vcc) * 4095)
 
     # step = 0.1
     print(f'Starting on {current_voltage}V')
@@ -38,15 +38,35 @@ def volt(dac, i2c, output_voltage=1.5, step=0.1, duration=3):
         current_voltage += step
         dac.raw_value = int((current_voltage / vcc) * 4095)
         print(f'Changed to {current_voltage}V')
+        # if not current_voltage > vcc:
+        #     dac.raw_value = int((current_voltage / vcc) * 4095)
+        #     print(f'Changed to {current_voltage}V')
+        # else:
+        #     dac.raw_value = 4095
+        #     break
         if current_voltage >= output_voltage:
             current_voltage = output_voltage
-            dac.raw_value = dac_value
+            dac.raw_value = int((current_voltage / vcc) * 4095)
             print(f'Now ending on {current_voltage}')
             break
 
     print(f"DAC output set to {output_voltage}V")
 
+    print(f'The duration is {duration}')
+
     time.sleep(duration)
+
+    while True:
+        time.sleep(1/3)
+        current_voltage -= step
+        if current_voltage >= 0:
+            dac.raw_value = int((current_voltage / vcc) * 4095)
+        print(f'Changed to {current_voltage}V')
+        if current_voltage <= 0:
+            current_voltage = 0
+            dac.raw_value = 0
+            print(f'Now ending on {current_voltage}')
+            break
 
     dac.raw_value = 0
     # i2c.deinit()
@@ -58,4 +78,6 @@ def reset(dac, i2c, start_voltage=0):
     dac.raw_value = start_voltage
     i2c.deinit()
     print("Program terminated.")
+
+    exit()
 

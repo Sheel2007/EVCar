@@ -87,17 +87,31 @@ def test():
     print('Button disabled')
     time.sleep(5)
 
+def wrapper(dac, i2c, spe_total, time_total):
+
+    start_button.config(state='disabled')
+
+    output_voltage = ((3 - 2.5) * (int(spe_total.get()) / 100)) + 2.5
+
+    backend.volt(dac=dac, i2c=i2c, output_voltage=output_voltage, duration=int(time_total.get()))
+
+    time.sleep(int(time_total.get()))
+
+    dac.raw_value = 0
+
+    start_button.config(state='normal')
 
 title = ttk.Label(title_frame, text="Lucy's Electric Car Controller", anchor='center').grid(column=2, row=0, sticky='nsew')
-res = ttk.Button(topframe, text='Reset Values', command=reset)
+res = ttk.Button(topframe, text='Close program', command=lambda: backend.reset(dac, i2c))
 res.grid(column=0, row=0, sticky='nsew', padx=20, pady=20)
 s_spe = Scale(topframe, borderwidth=10, resolution=5, variable=spe_total, showvalue=0, from_ = 0, to = 100, orient = HORIZONTAL)
 s_spe.grid(column=1, row=1, columnspan=3, sticky='nsew', padx=5, pady=5)
-s_time = Scale(bottomframe, borderwidth=10, variable=time_total, resolution=5, showvalue=0, from_ = 0, to = 15, orient = HORIZONTAL)
+s_time = Scale(bottomframe, borderwidth=10, variable=time_total, resolution=1, showvalue=0, from_ = 0, to = 15, orient = HORIZONTAL)
 s_time.grid(column=1, row=1, columnspan=3, sticky='nsew', padx=5, pady=5)
 
 
-start_button = ttk.Button(begin, text='Start Car', command=lambda: backend.volt(dac=dac, i2c=i2c, output_voltage=3, duration=3))
+# start_button = ttk.Button(begin, text='Start Car', command=lambda: backend.volt(dac=dac, i2c=i2c, output_voltage=3, duration=3))
+start_button = ttk.Button(begin, text='Start Car', command=lambda: wrapper(dac=dac, i2c=i2c, spe_total=spe_total, time_total=time_total))
 start_button.grid(column=0, row=0, sticky='nsew', padx=10, pady=1)
 speed_button = ttk.Radiobutton(begin, text="Speed", variable=start_op, value='speed')
 distance_button = ttk.Radiobutton(begin, text="Time", variable=start_op, value='time')
