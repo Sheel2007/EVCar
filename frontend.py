@@ -115,8 +115,8 @@ start_button = ttk.Button(begin, text='Start Car', command=lambda: wrapper(dac=d
 start_button.grid(column=0, row=0, sticky='nsew', padx=10, pady=1)
 speed_button = ttk.Radiobutton(begin, text="Speed", variable=start_op, value='speed')
 distance_button = ttk.Radiobutton(begin, text="Time", variable=start_op, value='time')
-speed_button.grid(column=1, row=0, sticky='nsew', padx=5, pady=1)
-distance_button.grid(column=2, row=0, sticky='nsew', padx=5, pady=1)
+#speed_button.grid(column=1, row=0, sticky='nsew', padx=5, pady=1)
+#distance_button.grid(column=2, row=0, sticky='nsew', padx=5, pady=1)
 
 
 layout(topframe, 'Speed', spe_total, '%', 0, 100, 1)
